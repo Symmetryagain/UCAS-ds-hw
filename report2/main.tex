@@ -1,0 +1,115 @@
+\documentclass{beamer}
+\usefonttheme{professionalfonts}
+\usepackage[UTF8,space,hyperref]{ctex}
+\usepackage{graphics}
+\usepackage{wrapfig}
+\usepackage{ulem}
+\usetheme{Berlin}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{ulem}
+\usepackage{subfigure}
+\usecolortheme{default}
+\setbeamertemplate{headline}{} 
+
+\title{Data structures Final Assignment}
+\author{Yaoming Shi, Hanlin Qian, Yizhou Xue}
+\institute{UCAS}
+\date{2025.6.25}
+
+\begin{document}
+
+\maketitle
+
+\section{引入}
+
+\begin{frame}{多关键字排序}
+  在本次大作业中, 一共运用了三种方式对多关键字进行排序
+  \begin{itemize}
+    \item \textbf{简单LSD排序}：用LSD办法, 和简单的冒泡排序对多关键字序列进行稳定的原地排序
+    \item \textbf{基数排序}：基于分配和收集和LSD的思想, 对多关键字序列进行稳定的非原地排序
+    \item \textbf{MSD排序}：根据拓展的要求, 用MSD进行递归排序, 来进行效果的比较,
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{LSD排序}
+  根据关键词的优先级从高到低分别进行三次遍历的排序
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/lsd.jpg}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{基数排序}
+  严格按照课上的思路, 将关键字分成若干个链表, 最后再collect起来
+  \begin{figure}
+    \centering
+    \begin{minipage}{0.49\linewidth}
+      \centering
+      \includegraphics[width=0.95\linewidth]{figures/radix.png}
+      \caption*{基数排序}
+    \end{minipage}
+    \begin{minipage}{0.49\linewidth}
+      \centering
+      \includegraphics[width=0.95\linewidth]{figures/dc.png}
+      \caption*{分配和收集函数}
+    \end{minipage}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{MSD排序}
+  首先将最高优先级的关键字排序, 之后对相同关键字的元素进行递归排序, 直到所有关键字都被处理完毕
+  \begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{figures/msd.png}
+    \caption*{msd算法}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{其它关键代码-随机数生成}
+  为了防止每次运行生成的随机数都相同, 于是利用srand函数生成了随机数种子
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/srand.png}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{循环运行取平均值}
+  为了让运行的结果更加有统计意义, 在main函数中重复运行LOOP次, 最终取平均值结果
+  \begin{figure}
+    \centering
+    \begin{minipage}[b]{0.49\linewidth}
+      \centering
+      \includegraphics[width=0.95\linewidth]{figures/LOOP.png}
+      \caption*{重复运行}
+    \end{minipage}
+    \begin{minipage}[b]{0.49\linewidth}
+      \centering
+      \includegraphics[width=0.95\linewidth]{figures/LOOP_result.png}
+      \caption*{运行时的过程显示}
+    \end{minipage}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{提高时间精度}
+  由于在题目给的输入规模下,time.h中的clock()函数的精度太低, 最多只能读到毫秒, 于是用timespec来达到纳秒级, 获取更高精度的结果
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/time.png}
+    \caption*{提高时间精度的代码段}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{最终结果}
+  最终运行1000次取平均值的结果(记录数不超过10000,关键字数不超过5), 运行时间LSD > MSD > 基数排序
+  这符合我们的预期, 因为这三者的最差时间复杂度分别为$O(n\times k), O(n\times k)和O(n\times logk)$, 其中n为记录数, k为关键字数,
+  而MSD的平均复杂度更小, 因为所有的高优先级关键字都相同的概率显然更小
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/result.png}
+    \caption*{运行结果截图}
+  \end{figure}
+\end{frame}
+
+
+\end{document}

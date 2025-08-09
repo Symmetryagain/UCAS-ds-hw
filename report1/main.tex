@@ -1,0 +1,118 @@
+\documentclass{beamer}
+\usefonttheme{professionalfonts}
+\usepackage[UTF8,space,hyperref]{ctex}
+\usepackage{graphics}
+\usepackage{wrapfig}
+\usepackage{ulem}
+\usetheme{Berlin}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{ulem}
+\usepackage{subfigure}
+\usecolortheme{default}
+\setbeamertemplate{headline}{} 
+
+\title{Data structures Final Assignment}
+\author{Yaoming Shi, Hanlin Qian, Yizhou Xue}
+\institute{UCAS}
+\date{2025.6.25}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{题目要求}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.9\textwidth]{figures/require.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{总体设计与功能}
+  \begin{itemize}
+    \item 支持火车/飞机数据的批量导入。
+    \item 火车建模：分层图最短路，支持不同优先级。
+    \item 飞机建模：直接对起点和终点之间连边，跑最短路。
+  \end{itemize}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/train_data.png}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{火车部分建模与查询}
+  \begin{itemize}
+    \item \textbf{分层图建模}：每个车站每个车次拆点，分两层，支持换乘建边。
+    \item \textbf{边权设计}：一类边为区间时间/票价，二类边为换乘间隔。
+    \item \textbf{最短路算法}：Dijkstra，支持时间优先/价格优先。
+    \item \textbf{换乘规则}：可设定是否允许换乘及最小换乘间隔。
+    \item \textbf{查询接口}：支持城市/车站为起终点，输出详细方案。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{飞机部分建模与查询}
+  \begin{itemize}
+    \item \textbf{点对点建图}：每个城市为节点，航班为有向边。
+    \item \textbf{支持一次中转}：简单bfs，允许中转查询。
+    \item \textbf{多关键字查询}：可选时间优先或价格优先。
+    \item \textbf{批量导入}：自动识别城市名并建表。
+    \item \textbf{详细输出}：每段航班号、起降城市、时间、价格。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{数据结构与核心实现}
+  \begin{itemize}
+    \item \textbf{哈希表}：城市名、站名映射唯一 ID，支持中文。
+    \item \textbf{链式前向星}：存储火车分层图、飞机航班图。
+    \item \textbf{小根堆}：Dijkstra 最短路，支持多关键字比较。
+    \item \textbf{全局变量}：统一管理所有城市、站点、图结构。
+    \item \textbf{失效标记}：通过expire字段实现逻辑删除/恢复。对每个 Station 和 Train\_id 维护一个 expire 字段，表示该车次是否失效。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{用户交互界面}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{figures/app.png}
+        \caption*{控制台交互界面}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{运行结果———火车车次加入与查询}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{figures/result1.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{运行结果——航班加入与查询}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.6\textwidth]{figures/result2.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{主要代码结构与模块说明}
+  \begin{itemize}
+    \item \textbf{main.c}：主入口，调用app初始化与主循环。
+    \item \textbf{app.c/h}：系统初始化与交互主循环。
+    \item \textbf{global.c/h}：全局变量与初始化。
+    \item \textbf{modify.c/h}：增删查改接口，自动建站/建城。
+    \item \textbf{train.c}：火车数据导入、最短路与方案输出。
+    \item \textbf{plane.c/h}：航班数据导入、查询与增删。
+    \item \textbf{graph.c/h}：分层图、节点、边、Dijkstra实现。
+    \item \textbf{heap.c/h}：小根堆，支持多关键字优先级。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{总结与体会}
+  \begin{itemize}
+    \item 本系统实现了复杂的交通网络建模与多条件最优路径查询。
+    \item 采用分层图、哈希表、堆等多种数据结构，兼顾效率与灵活性。
+    \item 支持中文输入输出，批量导入，用户体验友好。
+    \item 工程结构复杂，模块划分清晰，便于维护与扩展。
+    \item 收获了大规模数据结构设计与工程实现的宝贵经验。
+  \end{itemize}
+\end{frame}
+
+\end{document}
